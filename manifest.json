@@ -1,0 +1,15 @@
+{
+	"name": "Crabada click bot",
+	"version": "0.1.0",
+	"manifest_version": 3,
+	"content_scripts": [
+		{
+			"matches": ["https://play.crabada.com/mine/start-looting"],
+			"js": ["content.js"]
+		}
+	],
+	"action": {
+		"default_popup": "popup/popup.html",
+		"default_title": "Start"
+	}
+}
