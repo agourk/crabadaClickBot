@@ -1,5 +1,6 @@
 const LOOT_MINES = []
 const FIRST_MINES = []
+let RUNNING = false
 
 //Observes loading of main page
 const page_observer = new MutationObserver(mutations => {
@@ -83,7 +84,7 @@ async function set_first_mines() {
 //Infinite loop that refreshes available mines and clicks the correct ones
 async function check_mines() {
   const mines = document.querySelectorAll('div.items-icon')
-  await new Promise(r => setTimeout(r, 100))
+  await new Promise(r => setTimeout(r, 10))
   for (let i = 0; i < 7 && i < mines.length; ++i) {
     const mine_id = mines[i].parentElement.textContent.split('\u00A0')[1].split(' ')[0]
     const mine_type = mines[i].firstChild.getAttribute('data-tooltip')
@@ -92,6 +93,7 @@ async function check_mines() {
       attack_observer.observe(document.getElementsByClassName('mine')[0], {childList: true, subtree: true})
       mines[i].click()
       console.log('Crabada clicker bot ended')
+      RUNNING = false
       return
     }
   }
@@ -105,20 +107,19 @@ chrome.runtime.onMessage.addListener(async function(msg, sender, sendResponse) {
       sendResponse('KO')
       return
     }
-    Object.keys(msg.types).forEach(type => {
-      if (msg.types[type].selected == true)
-        LOOT_MINES.push(type)
-      else {
-        const index = LOOT_MINES.indexOf(type)
-        if (index >= 0)
-          LOOT_MINES.splice(index, 1)
-      }
-    })
+    LOOT_MINES.length = 0
+    msg.attack_types.forEach(type => LOOT_MINES.push(type))
     if (LOOT_MINES.length == 0) {
       sendResponse('NO_TYPES')
       return
     }
+    if (RUNNING) {
+      sendResponse('RUNNING')
+      return
+    }
     console.log('Crabada clicker bot started')
+    console.log('Searching for:', LOOT_MINES)
+    RUNNING = true
     if (document.evaluate("//div[text()='Start Looting']", document.body, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue) {
       refresh_first_mines()
     } else {

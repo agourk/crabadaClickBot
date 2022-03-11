@@ -26,9 +26,25 @@ button {
   grid-template-columns: 1fr 1fr;
 }
 
+.typeContainer {
+  position: relative;
+}
+
 .typeImg {
-  width: 50px;
-  height: 50px;
+  width: 66px;
+  height: 66px;
+}
+
+.check {
+  width: 40px;
+  height: 40px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  filter: drop-shadow( 1px 1px 5px #000 );
+  display: none;
+
+  transform: translate(-50%, -50%);
 }
 
 .error {
@@ -37,6 +53,16 @@ button {
 
   font-size: 18px;
   background-color: darkred;
+  color: white;
+  display: none;
+}
+
+.success {
+  margin-top: 5px;
+  padding: 3px;
+
+  font-size: 14px;
+  background-color: green;
   color: white;
   display: none;
 }
