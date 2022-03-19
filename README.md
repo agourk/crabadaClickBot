@@ -6,6 +6,7 @@ This is a Chrome extension that clicks through the Crabada idle game to find a m
 ## How?
 ### Requirements:
 * Clone this repository somewhere
+* For Firefox users: replace the root `manifest.json` by the `firefox_manifest/manifest.json` one
 * Activate "Developer mode" here: `chrome://extensions/`
 * That reveals the "Load unpacked" button, click it and indicate the `crabadaClickBot` you cloned in
 
