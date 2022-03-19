@@ -66,3 +66,8 @@ button {
   color: white;
   display: none;
 }
+
+.settingsContainer {
+  background-color: darkslategray;
+  color: white;
+}
