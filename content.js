@@ -51,6 +51,7 @@ async function refreshFirstMines() {
 //Sets `first_mines` to avoid
 async function setFirstMines() {
   const mines = document.querySelectorAll('div.items-icon')
+  FIRST_MINES.length = 0
   mines.forEach(mine => {
     FIRST_MINES.push(mine.parentElement.textContent.split('\u00A0')[1].split(' ')[0])
   })
@@ -58,21 +59,17 @@ async function setFirstMines() {
   clickStartLooting()
 }
 
-//Checks for the "Select" button to trigger the Captcha
+// Waits for the "Select" button to appear and clicks it
 async function checkSelect() {
-  let clicked = false;
-  let loops = 0;
-  while (!clicked && loops < 1000) {
-    buttons = document.getElementsByClassName('ant-btn btn btn-primary')
-    for (let i = 0; i < buttons.length; i++) {
-      if (buttons[i].textContent == 'Select') {
-        buttons[i].click()
-        clicked = true
-        break
+  for (let popup of document.getElementsByClassName("ant-modal-wrap ant-modal-centered")) {
+    if (popup.textContent.includes('Select a team')) {
+      for (let i = 0; i < 1000; i++) {
+        if (popup.style.display != 'none') {
+          popup.getElementsByClassName('ant-btn btn btn-primary')[0].click()
+          break
+        }
       }
     }
-    await new Promise(r => setTimeout(r, 10))
-    loops += 10;
   }
 }
 
@@ -118,7 +115,7 @@ chrome.runtime.onMessage.addListener(async function(msg, sender, sendResponse) {
       return sendResponse('NO_TYPES')
     if (RUNNING)
       return sendResponse('RUNNING')
-    console.log('Crabada clicker bot started\nSearching for:', LOOT_MINES);
+    console.log('Crabada clicker bot started\nSearching for:', LOOT_MINES)
     RUNNING = true
     if (document.evaluate("//div[text()='Start Looting']", document.body, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue)
       refreshFirstMines()
