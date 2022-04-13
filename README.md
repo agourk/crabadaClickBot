@@ -15,5 +15,5 @@ Choose the mines you wish to loot and click `Start`.
 
 ## Who?
 You can contact me on Discord: `agourk#6965`<br/>
-If you consider this extension saves you time, or if you'd simply like to share your precious loot, then please consider sending tokens to my address: `0x0d2e6adec537e4142f826bd5a9f7a60f74919df1`<br/>
+If this extension saves you precious time, or if you wish to share your loot, then please consider sending tokens to my address: `0x0d2e6adec537e4142f826bd5a9f7a60f74919df1`<br/>
 (Please let me know when you donate, so that I can thank you :D)
