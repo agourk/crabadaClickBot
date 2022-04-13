@@ -7,13 +7,27 @@
     <link rel="stylesheet" href="popup.css">
   </head>
   <body>
-    <h2>Mines to loot:</h2>
+    <h2>Crabada clicker</h2>
     <div id="typesList"></div>
 
-    <button id="startButton">Start</button>
-    <div class="settingsContainer">
-      <input type="checkbox" id="toggleClose">
-      Close extension when bot starts?
+    <div class="bottomDivContainer">
+      <button id="startButton">Start</button>
+      <img src="https://icon-library.com/images/white-settings-icon/white-settings-icon-0.jpg" alt="settings" id="settingsToggle" draggable="false">
+    </div>
+  
+    <div id="settingsContainer" hidden>
+      <div class="setting">
+        <div>Skip first <span id="s_ignoreFirstMinesText"></span> mines</div>
+        0 <input type="range" min="0" max="10" id="s_ignoreFirstMines"> 10
+      </div>
+      <div class="setting">
+        <div>Close extension when clicker starts?</div>
+        <input type="checkbox" id="s_toggleClose">
+      </div>
+      <div class="setting">
+        <div>Sound?</div>
+        <input type="checkbox" id="s_audio">
+      </div>
     </div>
 
     <div class="error" id="KO">

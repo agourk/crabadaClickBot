@@ -28,72 +28,116 @@ const TYPES = {
     'selected': false
   }
 }
+const CHECKER_IMG = 'http://www.clker.com/cliparts/2/k/n/l/C/Q/transparent-green-checkmark-md.png'
 const buttonSound = new Audio('https://play.crabada.com/static/media/hover-sound.1f0c2dae.mp3')
 buttonSound.volume = 0.1
 
 document.addEventListener('DOMContentLoaded', function() {
-  function startBot() {
-    buttonSound.play()
+  //Plays a sound if audio setting is on
+  function playSound(sound) {
+    if (localStorage.getItem('s_audio') == 'true') {
+      sound.currentTime = 0
+      sound.play()
+    }
+  }
+
+  //Saves the types selected to local storage
+  function saveTypes() {
     const attack_types = []
     Object.keys(TYPES).forEach(type => {if (TYPES[type].selected) attack_types.push(type)})
     localStorage.setItem('attack_types', attack_types)
+  }
+
+  function startClicker() {
+    playSound(buttonSound)
+    saveTypes()
+    const attack_types = localStorage.getItem('attack_types').split(',')
     chrome.tabs.query({active: true, currentWindow: true}, tabs => {
       chrome.tabs.sendMessage(
         tabs[0].id,
         {
-          'action': 'startBot',
-          'attack_types': attack_types,
+          'action': 'startClicker',
+          'attackTypes': attack_types,
+          's_ignoreFirstMines': localStorage.getItem('s_ignoreFirstMines'),
+          's_audio': localStorage.getItem('s_audio'),
         },
         receiveAnswer
       )
     })
   }
 
-  //Generates the elements with the different crab types
-  function createTypesDivs() {
-    const typesList = document.getElementById('typesList')
-    Object.keys(TYPES).forEach(type => {
-      const typeDiv = document.createElement('div')
-      typeDiv.className = 'typeContainer'
-      typesList.append(typeDiv)
+  //Create save preferences button 
+  function createSave() {
+    const typeDiv = document.createElement('div')
+    typeDiv.className = 'saveContainer'
+    typeDiv.textContent = 'Save '
+    typesList.append(typeDiv)
 
-      const typeImg = document.createElement('img')
-      typeImg.src = TYPES[type].image
-      typeImg.alt = type
-      typeImg.className = 'typeImg'
-      typeDiv.append(typeImg)
+    const checkImg = document.createElement('img')
+    checkImg.src = CHECKER_IMG
+    checkImg.alt = 'checked'
+    checkImg.draggable = false
+    checkImg.className = 'checkSmall'
+    typeDiv.append(checkImg)
 
-      const checkImg = document.createElement('img')
-      checkImg.src = 'http://www.clker.com/cliparts/2/k/n/l/C/Q/transparent-green-checkmark-md.png'
-      checkImg.alt = 'checked'
-      checkImg.className = 'check'
-      typeDiv.append(checkImg)
-
-      const attack_types = localStorage.getItem('attack_types')
-      if (attack_types) {
-        TYPES[type].selected = attack_types.includes(type)
-        if (attack_types.includes(type))
-          checkImg.style.display = 'block'
-        else
-          checkImg.style.display = 'none'
-      }
-
-      typeDiv.addEventListener('click', () => {
-        TYPES[type].selected = !TYPES[type].selected
-        if (TYPES[type].selected)
-          checkImg.style.display = 'block'
-        else
-          checkImg.style.display = 'none'
-      })
+    typeDiv.addEventListener('click', () => {
+      playSound(buttonSound)
+      saveTypes()
     })
   }
 
-  //Waits for clicker script's result
+  //Create a mine type button
+  function createTypeDiv(typesList, type) {
+    const typeDiv = document.createElement('div')
+    typeDiv.className = 'typeContainer'
+    typesList.append(typeDiv)
+
+    const typeImg = document.createElement('img')
+    typeImg.src = TYPES[type].image
+    typeImg.alt = type
+    typeImg.draggable = false
+    typeImg.className = 'typeImg'
+    typeDiv.append(typeImg)
+
+    const checkImg = document.createElement('img')
+    checkImg.src = CHECKER_IMG
+    checkImg.alt = 'checked'
+    checkImg.draggable = false
+    checkImg.className = 'check'
+    typeDiv.append(checkImg)
+
+    const attack_types = localStorage.getItem('attack_types')
+    if (attack_types) {
+      TYPES[type].selected = attack_types.includes(type)
+      if (attack_types.includes(type))
+        checkImg.style.display = 'block'
+      else
+        checkImg.style.display = 'none'
+    }
+
+    typeDiv.addEventListener('click', () => {
+      playSound(buttonSound)
+      TYPES[type].selected = !TYPES[type].selected
+      if (TYPES[type].selected)
+        checkImg.style.display = 'block'
+      else
+        checkImg.style.display = 'none'
+    })
+  }
+
+  //Fills the types div
+  function fillTypesList() {
+    const typesList = document.getElementById('typesList')
+    Object.keys(TYPES).forEach(type => createTypeDiv(typesList, type))
+    createSave()
+  }
+
+  //Catches clicker script's result
   function receiveAnswer(msg) {
     if ('OK'.includes(msg))
     {
       document.getElementById('OK').style.display = 'block'
-      if (localStorage.getItem('toggle_close') == 'true')
+      if (localStorage.getItem('s_close') == 'true')
         close()
     }
     else if ('NO_TYPES RUNNING'.includes(msg))
@@ -102,21 +146,57 @@ document.addEventListener('DOMContentLoaded', function() {
       document.getElementById('KO').style.display = 'block'
   }
 
+  //Toggles "ignore first x mines" setting
+  function s_updateIgnoreFirstMines() {
+    localStorage.setItem('s_ignoreFirstMines', s_ignoreFirstMines.value)
+    s_ignoreFirstMinesText.textContent = s_ignoreFirstMines.value
+  }
+
   //Toggles "close extension" setting
-  function closeToggle() {
-    if (localStorage.getItem('toggle_close') == 'true')
-      localStorage.setItem('toggle_close', 'false')
+  function s_closeExtensionToggle() {
+    localStorage.setItem('s_close', s_toggleClose.checked)
+  }
+
+  //Toggles "audio" setting
+  function s_audioToggle() {
+    localStorage.setItem('s_audio', s_audio.checked)
+  }
+
+  //Toggles settings div
+  function toggleSettings() {
+    const settingsDiv = document.getElementById('settingsContainer')
+    if (settingsDiv.hidden)
+      settingsDiv.hidden = false
     else
-      localStorage.setItem('toggle_close', 'true')
+      settingsDiv.hidden = true
   }
 
   //Init popup
-  createTypesDivs()
-  document.getElementById('startButton').addEventListener('click', startBot)
-  const toggle_close = document.getElementById('toggleClose')
-  toggle_close.addEventListener('click', closeToggle)
-  if (localStorage.getItem('toggle_close') == 'true')
-    toggle_close.checked = true
+  fillTypesList()
+  document.getElementById('startButton').addEventListener('click', startClicker)
+
+  //-Settings
+  document.getElementById('settingsToggle').addEventListener('click', toggleSettings)
+
+  const s_ignoreFirstMines = document.getElementById('s_ignoreFirstMines')
+  s_ignoreFirstMines.addEventListener('mousemove', s_updateIgnoreFirstMines)
+  const s_ignoreFirstMinesValue = localStorage.getItem('s_ignoreFirstMines')
+  if (s_ignoreFirstMinesValue)
+    s_ignoreFirstMines.value = s_ignoreFirstMinesValue
+  const s_ignoreFirstMinesText = document.getElementById('s_ignoreFirstMinesText')
+  s_ignoreFirstMinesText.textContent = s_ignoreFirstMines.value
+
+  const s_toggleClose = document.getElementById('s_toggleClose')
+  s_toggleClose.addEventListener('click', s_closeExtensionToggle)
+  if (localStorage.getItem('s_close') == 'true')
+    s_toggleClose.checked = true
   else
-    toggle_close.checked = false
+    s_toggleClose.checked = false
+
+  const s_audio = document.getElementById('s_audio')
+  s_audio.addEventListener('click', s_audioToggle)
+  if (localStorage.getItem('s_audio') == 'true')
+    s_audio.checked = true
+  else
+    s_audio.checked = false
 })

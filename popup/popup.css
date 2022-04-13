@@ -1,14 +1,16 @@
 body {
-  width: 150px;
+  width: 170px;
   height: 10%;
+  margin-left: 2px;
+  margin-right: 2px;
 
-  background-color: grey;
+  color: white;
+  background-color: #13265C   ;
   text-align: center;
   font-size: 14px;
 }
 
 h2 {
-  color: white;
   text-decoration: underline;
 }
 
@@ -19,32 +21,6 @@ a {
 button {
   margin-top: 5px;
   font-size: 20px;
-}
-
-#typesList {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-}
-
-.typeContainer {
-  position: relative;
-}
-
-.typeImg {
-  width: 66px;
-  height: 66px;
-}
-
-.check {
-  width: 40px;
-  height: 40px;
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  filter: drop-shadow( 1px 1px 5px #000 );
-  display: none;
-
-  transform: translate(-50%, -50%);
 }
 
 .error {
@@ -67,7 +43,82 @@ button {
   display: none;
 }
 
-.settingsContainer {
-  background-color: darkslategray;
-  color: white;
+.bottomDivContainer {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+}
+
+#startButton {
+  width: fit-content;
+  height: fit-content;
+  justify-self: end;
+}
+
+/* SETTINGS */
+#settingsToggle {
+  width: 32px;
+  height: 32px;
+  position: relative;
+  top: 50%;
+  left: 50%;
+  margin-left: -16px;
+  margin-top: -16px;
+}
+
+#settingsContainer {
+  margin-top: 5px;
+}
+
+.setting {
+  background-color: black;
+  margin: 2px;
+}
+
+#ignoreFirstMines {
+  display: inline;
+  width: 70%;
+}
+
+/* TYPES */
+#typesList {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.typeContainer {
+  position: relative;
+  cursor: default;
+}
+
+.typeImg {
+  width: 66px;
+  height: 66px;
+}
+
+.check {
+  width: 40px;
+  height: 40px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  filter: drop-shadow( 1px 1px 5px black );
+  display: none;
+  transform: translate(-50%, -50%);
+}
+
+.saveContainer {
+  position: relative;
+  font-size: 18px;
+  margin: auto;
+  padding: 2px;
+  cursor: default;
+  border: solid green 3px;
+  background-color: black;
+}
+
+.checkSmall {
+  position: initial;
+  display: inline;
+  width: 15px;
+  height: 15px;
 }

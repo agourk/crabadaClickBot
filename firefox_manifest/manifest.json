@@ -1,5 +1,5 @@
 {
-	"name": "Crabada click bot",
+	"name": "Crabada clicker",
 	"version": "0.4.0",
 	"manifest_version": 2,
 	"content_scripts": [
@@ -14,6 +14,6 @@
 	},
 	"browser_action": {
 		"default_popup": "popup/popup.html",
-		"default_title": "Crabada click bot"
+		"default_title": "Crabada clicker"
 	}
 }
