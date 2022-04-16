@@ -1,6 +1,6 @@
+/* TAGS */
 body {
   width: 170px;
-  height: 10%;
   margin-left: 2px;
   margin-right: 2px;
 
@@ -11,7 +11,12 @@ body {
 }
 
 h2 {
+  margin-top: 0;
   text-decoration: underline;
+}
+
+h3 {
+  margin: 0;
 }
 
 a {
@@ -23,6 +28,16 @@ button {
   font-size: 20px;
 }
 
+/* SCROLLBAR */
+::-webkit-scrollbar {
+  width: 2px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: wheat;
+}
+
+/* CLASSES / IDS */
 .error {
   margin-top: 5px;
   padding: 3px;
@@ -41,6 +56,20 @@ button {
   background-color: green;
   color: white;
   display: none;
+}
+
+.mineSettingContainer {
+  font-size: 16px;
+  border: wheat 3px solid;
+  border-top: wheat 1px solid;
+  border-radius: 15px;
+  padding: 5px;
+}
+
+.mineSettingInput {
+  font-size: 20px;
+  width: 35px;
+  height: auto;
 }
 
 .bottomDivContainer {
@@ -70,7 +99,7 @@ button {
 }
 
 .setting {
-  background-color: black;
+  background-color: rgb(20, 20, 20);
   margin: 2px;
 }
 
@@ -80,6 +109,12 @@ button {
 }
 
 /* TYPES */
+.typesContainer {
+  border: wheat 3px solid;
+  border-bottom: wheat 1px solid;
+  border-radius: 15px;
+}
+
 #typesList {
   display: grid;
   grid-template-columns: 1fr 1fr;

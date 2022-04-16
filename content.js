@@ -1,10 +1,11 @@
 const LOOT_MINES = []
 const IGNORE_MINES = []
 let RUNNING = false
+let LOOTER_BP = 0
+let MAX_REVENGE = 0
 let s_IGNORE_FIRST_MINES = 0
 let s_AUDIO = true
 const lootSound = new Audio('https://www.zapsplat.com/wp-content/uploads/2015/sound-effects-46416/zapsplat_multimedia_game_sound_treasure_chest_win_impact_thud_coins_dry_52066.mp3')
-lootSound.volume = 0.1
 const TYPES = {
   'data:image/png;base64,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'
   : 'ORE',
@@ -107,18 +108,41 @@ async function checkSelect() {
   }
 }
 
+//Calculates the winrate of the loot
+function calculateMinerRevenge(mine, mine_type) {
+  const mine_MP = mine.parentElement.getElementsByClassName('mine-point')[0].children[1].textContent
+  let mine_BP = mine.parentElement.getElementsByClassName('battle-point mt-0')[0].children[1].textContent
+  if (mine_type == 'No faction')
+    mine_BP *= 0.97
+  else
+    mine_BP *= 0.93
+  let BP_closeness = 0
+  if ((LOOTER_BP - mine_BP) > 0)
+    BP_closeness = (20 / ((LOOTER_BP - mine_BP)**0.5))
+  const MP_modifier = ((mine_MP / 3 - 56) * 1.25)
+  let percentage = 7 + MP_modifier + BP_closeness
+  if (percentage > 40)
+    percentage = 40
+  return percentage
+}
+
 //Check if the mine should be looted
 async function checkMine(mine) {
-  const mine_id = mine.parentElement.textContent.split('\u00A0')[1].split(' ')[0]
   const mine_img = mine.getElementsByTagName('img')[0].src
   let mine_type
   if (mine_img.slice(136, 138).length > 0)
     mine_type = TYPES[mine_img.slice(136, 138)]
   else
     mine_type = TYPES[mine_img]
+  const mine_id = mine.parentElement.textContent.split('\u00A0')[1].split(' ')[0]
   if (!IGNORE_MINES.includes(mine_id) && LOOT_MINES.includes(mine_type)) {
     if (s_IGNORE_FIRST_MINES == 0)
     {
+      const revenge = calculateMinerRevenge(mine, mine_type)
+      if (revenge > MAX_REVENGE) {
+        IGNORE_MINES.push(mine_id)
+        return 0
+      }
       mines_observer.disconnect()
       mine.parentElement.children[2].getElementsByTagName('button')[0].click()
       await checkSelect()
@@ -127,7 +151,6 @@ async function checkMine(mine) {
       console.log('Clicker found mine:', mine_id)
       return 1
     } else {
-      console.log("IGNORING", mine_id)
       IGNORE_MINES.push(mine_id)
       --s_IGNORE_FIRST_MINES
     }
@@ -144,6 +167,7 @@ async function checkMines() {
       return
   }
   clickStartLooting()
+  return
 }
 
 //Sets the mines to loot
@@ -160,23 +184,35 @@ function clickStartLooting() {
   document.evaluate("//div[text()='Start Looting']", document.body, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue.click()
 }
 
+//Sets settings sent from the extension
+function setSettings(msg) {
+  if (setLootMines(msg.attackTypes) == false)
+    throw 'NO_TYPES'
+  LOOTER_BP = msg.looterBP
+  MAX_REVENGE = msg.maxRevenge
+  s_IGNORE_FIRST_MINES = msg.s_ignoreFirstMines
+
+  s_AUDIO = msg.s_audio
+  lootSound.volume = msg.s_volume
+  if (RUNNING)
+    throw 'RUNNING'
+}
+
 //Starts when extension sends `startClicker` message
 chrome.runtime.onMessage.addListener(async function(msg, sender, sendResponse) {
   if (msg.action === 'startClicker') {
     if (!window.location.href.includes('play.crabada.com/mine'))
       return sendResponse('KO')
-    // try {
-    //   setSettings(msg)
-    // } catch (e) {
-    //   return sendResponse(e)
-    // }
-    if (setLootMines(msg.attackTypes) == false)
-      return sendResponse('NO_TYPES')
-    s_AUDIO = msg.s_audio
-    s_IGNORE_FIRST_MINES = msg.s_ignoreFirstMines
-    if (RUNNING)
-      return sendResponse('RUNNING')
-    console.log('Crabada clicker started\nSearching for:', LOOT_MINES)
+    try {
+      setSettings(msg)
+    } catch (e) {
+      return sendResponse(e)
+    }
+    console.log('Crabada clicker started',
+                '\nSearching for mines:', LOOT_MINES,
+                '\nWith looter\'s BP:', LOOTER_BP,
+                '\nWith max miner revenge:', MAX_REVENGE,
+                '\nAnd skipping the first:', s_IGNORE_FIRST_MINES)
     RUNNING = true
     if (document.evaluate("//div[text()='Start Looting']", document.body, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue)
       refreshFirstMines()

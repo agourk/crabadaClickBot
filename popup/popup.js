@@ -30,7 +30,7 @@ const TYPES = {
 }
 const CHECKER_IMG = 'http://www.clker.com/cliparts/2/k/n/l/C/Q/transparent-green-checkmark-md.png'
 const buttonSound = new Audio('https://play.crabada.com/static/media/hover-sound.1f0c2dae.mp3')
-buttonSound.volume = 0.1
+let LOOTER_BP = 0
 
 document.addEventListener('DOMContentLoaded', function() {
   //Plays a sound if audio setting is on
@@ -58,8 +58,11 @@ document.addEventListener('DOMContentLoaded', function() {
         {
           'action': 'startClicker',
           'attackTypes': attack_types,
+          'looterBP': localStorage.getItem('looterBP'),
+          'maxRevenge': localStorage.getItem('maxRevenge'),
           's_ignoreFirstMines': localStorage.getItem('s_ignoreFirstMines'),
           's_audio': localStorage.getItem('s_audio'),
+          's_volume': localStorage.getItem('s_volume') / 100,
         },
         receiveAnswer
       )
@@ -146,7 +149,7 @@ document.addEventListener('DOMContentLoaded', function() {
       document.getElementById('KO').style.display = 'block'
   }
 
-  //Toggles "ignore first x mines" setting
+  //Updates "ignore first x mines" setting
   function s_updateIgnoreFirstMines() {
     localStorage.setItem('s_ignoreFirstMines', s_ignoreFirstMines.value)
     s_ignoreFirstMinesText.textContent = s_ignoreFirstMines.value
@@ -162,6 +165,13 @@ document.addEventListener('DOMContentLoaded', function() {
     localStorage.setItem('s_audio', s_audio.checked)
   }
 
+  //Updates "volume" setting
+  function s_updateVolume() {
+    localStorage.setItem('s_volume', s_volume.value)
+    buttonSound.volume = s_volume.value / 100
+    s_volumeText.textContent = s_volume.value
+  }
+
   //Toggles settings div
   function toggleSettings() {
     const settingsDiv = document.getElementById('settingsContainer')
@@ -174,11 +184,18 @@ document.addEventListener('DOMContentLoaded', function() {
   //Init popup
   fillTypesList()
   document.getElementById('startButton').addEventListener('click', startClicker)
+  const BPInput = document.getElementById('BPInput')
+  BPInput.addEventListener('input', e => localStorage.setItem('looterBP', e.target.value))
+  BPInput.value = localStorage.getItem('looterBP')
+  const maxRevengeInput = document.getElementById('maxRevengeInput')
+  maxRevengeInput.addEventListener('input', e => localStorage.setItem('maxRevenge', e.target.value))
+  maxRevengeInput.value = localStorage.getItem('maxRevenge')
 
   //-Settings
   document.getElementById('settingsToggle').addEventListener('click', toggleSettings)
 
   const s_ignoreFirstMines = document.getElementById('s_ignoreFirstMines')
+  s_ignoreFirstMines.addEventListener('click', s_updateIgnoreFirstMines)
   s_ignoreFirstMines.addEventListener('mousemove', s_updateIgnoreFirstMines)
   const s_ignoreFirstMinesValue = localStorage.getItem('s_ignoreFirstMines')
   if (s_ignoreFirstMinesValue)
@@ -199,4 +216,14 @@ document.addEventListener('DOMContentLoaded', function() {
     s_audio.checked = true
   else
     s_audio.checked = false
+
+  const s_volume = document.getElementById('s_volume')
+  s_volume.addEventListener('click', s_updateVolume)
+  s_volume.addEventListener('mousemove', s_updateVolume)
+  const s_volumeValue = localStorage.getItem('s_volume')
+  if (s_volumeValue)
+    s_volume.value = s_volumeValue
+  const s_volumeText = document.getElementById('s_volumeText')
+  s_volumeText.textContent = s_volume.value
+  s_updateVolume()
 })

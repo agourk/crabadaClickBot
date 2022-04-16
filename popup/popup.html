@@ -8,13 +8,29 @@
   </head>
   <body>
     <h2>Crabada clicker</h2>
-    <div id="typesList"></div>
+    <div class="typesContainer">
+      <h3>Select the mines to search for:</h3>
+      <div id="typesList"></div>
+    </div>
 
+    <div class="mineSettingContainer">
+      <span>Your team's BP</span>
+      <br><input class="mineSettingInput" id="BPInput">
+      <br><span>Max. mine revenge %</span>
+      <br><input class="mineSettingInput" id="maxRevengeInput">
+    </div>
     <div class="bottomDivContainer">
       <button id="startButton">Start</button>
       <img src="https://icon-library.com/images/white-settings-icon/white-settings-icon-0.jpg" alt="settings" id="settingsToggle" draggable="false">
     </div>
-  
+
+    <div class="error" id="KO">
+      Please try again on <a href="https://play.crabada.com/mine/start-looting" target="_blank" rel="noopener noreferrer">Crabada</a>
+    </div>
+    <div class="error" id="NO_TYPES">Please select at least 1 type</div>
+    <div class="error" id="RUNNING">Clicker already running</div>
+    <div class="success" id="OK">Clicker running! You can close this now</div>
+
     <div id="settingsContainer" hidden>
       <div class="setting">
         <div>Skip first <span id="s_ignoreFirstMinesText"></span> mines</div>
@@ -28,13 +44,10 @@
         <div>Sound?</div>
         <input type="checkbox" id="s_audio">
       </div>
+      <div class="setting">
+        <div>Volume: <span id="s_volumeText"></span></div>
+        0 <input type="range" min="0" max="100" id="s_volume"> 100
+      </div>
     </div>
-
-    <div class="error" id="KO">
-      Please try again on <a href="https://play.crabada.com/mine/start-looting" target="_blank" rel="noopener noreferrer">Crabada</a>
-    </div>
-    <div class="error" id="NO_TYPES">Please select at least 1 type</div>
-    <div class="error" id="RUNNING">Clicker already running</div>
-    <div class="success" id="OK">Clicker running! You can close this now</div>
   </body>
 </html>
