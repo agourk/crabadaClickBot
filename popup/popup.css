@@ -38,23 +38,23 @@ button {
 }
 
 /* CLASSES / IDS */
-.error {
+#errors {
   margin-top: 5px;
   padding: 3px;
 
+  color: black;
+  font-weight: bold;
+}
+
+.error {
   font-size: 18px;
-  background-color: darkred;
-  color: white;
+  background-color: #FB5B08;
   display: none;
 }
 
 .success {
-  margin-top: 5px;
-  padding: 3px;
-
   font-size: 14px;
-  background-color: green;
-  color: white;
+  background-color: #71DF01;
   display: none;
 }
 
@@ -74,13 +74,20 @@ button {
 
 .bottomDivContainer {
   display: grid;
-  grid-template-columns: 2fr 1fr;
+  grid-template-columns: 2fr 1fr 1fr;
+  margin-top: 3px;
 }
 
 #startButton {
-  width: fit-content;
-  height: fit-content;
-  justify-self: end;
+  background-color: #71DF01;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+#stopButton {
+  background-color: #FB5B08;
+  font-size: 18px;
+  margin-right: 10px;
 }
 
 /* SETTINGS */
@@ -108,24 +115,24 @@ button {
   width: 70%;
 }
 
-/* TYPES */
-.typesContainer {
+/* FACTIONS */
+.factionsContainer {
   border: wheat 3px solid;
   border-bottom: wheat 1px solid;
   border-radius: 15px;
 }
 
-#typesList {
+#factionList {
   display: grid;
   grid-template-columns: 1fr 1fr;
 }
 
-.typeContainer {
+.factionContainer {
   position: relative;
   cursor: default;
 }
 
-.typeImg {
+.factionImg {
   width: 66px;
   height: 66px;
 }
@@ -139,21 +146,4 @@ button {
   filter: drop-shadow( 1px 1px 5px black );
   display: none;
   transform: translate(-50%, -50%);
-}
-
-.saveContainer {
-  position: relative;
-  font-size: 18px;
-  margin: auto;
-  padding: 2px;
-  cursor: default;
-  border: solid green 3px;
-  background-color: black;
-}
-
-.checkSmall {
-  position: initial;
-  display: inline;
-  width: 15px;
-  height: 15px;
 }

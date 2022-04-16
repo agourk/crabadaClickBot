@@ -8,9 +8,9 @@
   </head>
   <body>
     <h2>Crabada clicker</h2>
-    <div class="typesContainer">
-      <h3>Select the mines to search for:</h3>
-      <div id="typesList"></div>
+    <div class="factionsContainer">
+      <h3>Your team's faction:</h3>
+      <div id="factionList"></div>
     </div>
 
     <div class="mineSettingContainer">
@@ -21,20 +21,27 @@
     </div>
     <div class="bottomDivContainer">
       <button id="startButton">Start</button>
+      <button id="stopButton">Stop</button>
       <img src="https://icon-library.com/images/white-settings-icon/white-settings-icon-0.jpg" alt="settings" id="settingsToggle" draggable="false">
     </div>
 
-    <div class="error" id="KO">
-      Please try again on <a href="https://play.crabada.com/mine/start-looting" target="_blank" rel="noopener noreferrer">Crabada</a>
+    <div id="errors">
+      <div class="error" id="KO">
+        Please try again on <a href="https://play.crabada.com/mine/start-looting" target="_blank" rel="noopener noreferrer">Crabada</a>
+      </div>
+      <div class="error" id="NO_FACTION">Please select at least 1 faction</div>
+      <div class="error" id="NO_BP">Please enter your team battle points</div>
+      <div class="error" id="NO_MAX_REVENGE">Please enter the maximum miner's revenge</div>
+      <div class="error" id="RUNNING">Clicker already running</div>
+      <div class="error" id="NOT_RUNNING">Clicker not running</div>
+      <div class="error" id="STOPPED">Clicker stopped</div>
+      <div class="success" id="OK">Clicker running! You can close this now</div>
     </div>
-    <div class="error" id="NO_TYPES">Please select at least 1 type</div>
-    <div class="error" id="RUNNING">Clicker already running</div>
-    <div class="success" id="OK">Clicker running! You can close this now</div>
 
     <div id="settingsContainer" hidden>
       <div class="setting">
-        <div>Skip first <span id="s_ignoreFirstMinesText"></span> mines</div>
-        0 <input type="range" min="0" max="10" id="s_ignoreFirstMines"> 10
+        <div>Ignore first <span id="s_ignoreFirstMinesText"></span> mine(s)</div>
+        0 <input type="range" min="0" max="10" id="s_ignoreFirstMines" value="0"> 10
       </div>
       <div class="setting">
         <div>Close extension when clicker starts?</div>
@@ -42,11 +49,11 @@
       </div>
       <div class="setting">
         <div>Sound?</div>
-        <input type="checkbox" id="s_audio">
+        <input type="checkbox" id="s_audio" checked>
       </div>
       <div class="setting">
         <div>Volume: <span id="s_volumeText"></span></div>
-        0 <input type="range" min="0" max="100" id="s_volume"> 100
+        0 <input type="range" min="0" max="100" id="s_volume" value="10"> 100
       </div>
     </div>
   </body>

@@ -1,6 +1,6 @@
 {
 	"name": "Crabada clicker",
-	"version": "0.5.0",
+	"version": "0.6.0",
 	"manifest_version": 3,
 	"content_scripts": [
 		{
