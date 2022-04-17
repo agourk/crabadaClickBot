@@ -136,7 +136,7 @@ function calculateMinerBP(mine, mine_faction) {
 function calculateMinerRevenge(mine, mine_faction) {
   const mine_MP = mine.parentElement.getElementsByClassName('mine-point')[0].children[1].textContent
   const mine_BP = calculateMinerBP(mine, mine_faction)
-  if (mine_BP > 40)
+  if (mine_BP == 0)
     return 0
   const BP_closeness = (20 / ((LOOTER_BP - mine_BP)**0.5))
   const MP_modifier = ((mine_MP / 3 - 56) * 1.25)
