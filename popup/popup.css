@@ -11,8 +11,8 @@ body {
 }
 
 h2 {
-  margin-top: 0;
-  text-decoration: underline;
+  margin: 0;
+  margin-top: -10px;
 }
 
 h3 {

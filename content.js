@@ -3,6 +3,8 @@ let RUNNING = false
 let LOOTER_FACTION = ''
 let LOOTER_BP = 0
 let MAX_REVENGE = 0
+let MIN_REVENGE = 0
+let MIN_BP_DIFF = 0
 let s_IGNORE_FIRST_MINES = 0
 let s_AUDIO = true
 const lootSound = new Audio('https://www.zapsplat.com/wp-content/uploads/2015/sound-effects-46416/zapsplat_multimedia_game_sound_treasure_chest_win_impact_thud_coins_dry_52066.mp3')
@@ -132,18 +134,18 @@ function calculateMinerBP(mine, mine_faction) {
 }
 
 //Returns the winrate of the loot
-// or 0 if looter is weaker than miner
-function calculateMinerRevenge(mine, mine_faction) {
+// or 0 if looter is weaker than miner or if the BP diff is greater than `MIN_BP_DIFF`
+function calculateMinerRevenge(mine, mine_faction, mine_id) {
   const mine_MP = mine.parentElement.getElementsByClassName('mine-point')[0].children[1].textContent
   const mine_BP = calculateMinerBP(mine, mine_faction)
-  if (mine_BP == 0)
+  if (mine_BP == 0 || LOOTER_BP - mine_BP <= MIN_BP_DIFF)
     return 0
   const BP_closeness = (20 / ((LOOTER_BP - mine_BP)**0.5))
   const MP_modifier = ((mine_MP / 3 - 56) * 1.25)
   let percentage = 7 + MP_modifier + BP_closeness
   if (percentage > 40)
     percentage = 40
-  console.log("Miner's revenge calculated:", percentage)
+  console.log("Miner's revenge calculated:", percentage, "for mine ID:", mine_id)
   return percentage
 }
 
@@ -159,8 +161,8 @@ async function checkMine(mine) {
   if (!IGNORE_MINES.includes(mine_id)) {
     if (s_IGNORE_FIRST_MINES == 0)
     {
-      const miner_revenge = calculateMinerRevenge(mine, mine_faction)
-      if (miner_revenge > MAX_REVENGE || miner_revenge == 0) {
+      const miner_revenge = calculateMinerRevenge(mine, mine_faction, mine_id)
+      if (miner_revenge >= MAX_REVENGE || miner_revenge <= MIN_REVENGE || miner_revenge == 0) {
         IGNORE_MINES.push(mine_id)
         return 0
       }
@@ -209,11 +211,17 @@ function setSettings(msg) {
   LOOTER_BP = parseInt(msg.looterBP)
   if (LOOTER_FACTION == 'No faction')
     LOOTER_BP *= 0.97
-  if (!LOOTER_BP || LOOTER_BP == 0)
+  if (!LOOTER_BP)
     throw 'NO_BP'
   MAX_REVENGE = parseFloat(msg.maxRevenge)
-  if (!MAX_REVENGE || MAX_REVENGE == 0)
+  if (!MAX_REVENGE)
     throw 'NO_MAX_REVENGE'
+  MIN_REVENGE = parseFloat(msg.minRevenge)
+  if (!msg.minRevenge || msg.minRevenge.length == 0 || MIN_REVENGE > MAX_REVENGE)
+    throw 'NO_MIN_REVENGE'
+  MIN_BP_DIFF = parseFloat(msg.minBPDiff)
+  if (!msg.minBPDiff || msg.minBPDiff.length == 0)
+    throw 'NO_MIN_BP_DIFF'
   s_IGNORE_FIRST_MINES = parseInt(msg.s_ignoreFirstMines)
 
   s_AUDIO = msg.s_audio
@@ -235,7 +243,9 @@ chrome.runtime.onMessage.addListener(async function(msg, sender, sendResponse) {
     console.log('Crabada clicker started:',
                 '\nWith looter\'s faction:', LOOTER_FACTION,
                 '\nWith looter\'s BP:', LOOTER_BP,
-                '\nWith max miner revenge:', MAX_REVENGE,
+                '\nWith max. miner revenge:', MAX_REVENGE,
+                '\nWith min. miner revenge:', MIN_REVENGE,
+                '\nWith min. BP diff:', MIN_BP_DIFF,
                 '\nAnd ignoring the first:', s_IGNORE_FIRST_MINES)
     RUNNING = true
     if (document.evaluate("//div[text()='Start Looting']", document.body, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue)

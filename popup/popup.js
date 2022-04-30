@@ -45,6 +45,8 @@ document.addEventListener('DOMContentLoaded', function() {
           'looterFaction': localStorage.getItem('looterFaction'),
           'looterBP': localStorage.getItem('looterBP'),
           'maxRevenge': localStorage.getItem('maxRevenge'),
+          'minRevenge': localStorage.getItem('minRevenge'),
+          'minBPDiff': localStorage.getItem('minBPDiff'),
           's_ignoreFirstMines': localStorage.getItem('s_ignoreFirstMines'),
           's_audio': localStorage.getItem('s_audio'),
           's_volume': localStorage.getItem('s_volume') / 100,
@@ -108,8 +110,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
   //Catches clicker script's result
   function receiveAnswer(msg) {
-    console.log(errors)
-    console.log(errors.children)
     Array.from(errors.children).forEach(error => {
       error.style.display = 'none'
     })
@@ -119,7 +119,7 @@ document.addEventListener('DOMContentLoaded', function() {
       if (localStorage.getItem('s_close') == 'true')
         close()
     }
-    else if ('NO_FACTION RUNNING NO_BP NO_MAX_REVENGE STOPPED NOT_RUNNING'.includes(msg))
+    else if ('NO_FACTION RUNNING NO_BP NO_MAX_REVENGE NO_MIN_REVENGE NO_MIN_BP_DIFF STOPPED NOT_RUNNING'.includes(msg))
       document.getElementById(msg).style.display = 'block'
     else if (window.chrome.runtime.lastError || msg == 'KO')
       document.getElementById('KO').style.display = 'block'
@@ -167,6 +167,12 @@ document.addEventListener('DOMContentLoaded', function() {
   const maxRevengeInput = document.getElementById('maxRevengeInput')
   maxRevengeInput.addEventListener('input', e => localStorage.setItem('maxRevenge', e.target.value))
   maxRevengeInput.value = localStorage.getItem('maxRevenge')
+  const minRevengeInput = document.getElementById('minRevengeInput')
+  minRevengeInput.addEventListener('input', e => localStorage.setItem('minRevenge', e.target.value))
+  minRevengeInput.value = localStorage.getItem('minRevenge')
+  const minBPDiff = document.getElementById('minBPDiff')
+  minBPDiff.addEventListener('input', e => localStorage.setItem('minBPDiff', e.target.value))
+  minBPDiff.value = localStorage.getItem('minBPDiff')
 
   //Settings
   document.getElementById('settingsToggle').addEventListener('click', toggleSettings)
