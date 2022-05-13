@@ -4,7 +4,7 @@
 	"manifest_version": 2,
 	"content_scripts": [
 		{
-			"matches": ["https://play.crabada.com/*"],
+			"matches": ["https://play.crabada.com/*", "https://idle.crabada.com/mine"],
 			"js": ["content.js"]
 		}
 	],

@@ -60,7 +60,33 @@ document.addEventListener('DOMContentLoaded', function() {
   function stopClicker() {
     playSound(buttonSound)
     chrome.tabs.query({active: true, currentWindow: true}, tabs => {
-      chrome.tabs.sendMessage(tabs[0].id, { 'action': 'stopClicker' }, receiveAnswer)
+      chrome.tabs.sendMessage(tabs[0].id, {'action': 'stopClicker'}, receiveAnswer)
+    })
+  }
+
+  //Starts timer on the Crabada page
+  function startTimer() {
+    playSound(buttonSound)
+    chrome.tabs.query({active: true, currentWindow: true}, tabs => {
+      chrome.tabs.sendMessage(
+        tabs[0].id,
+        {
+          'action': 'startTimer',
+          'timerTime': localStorage.getItem('timerTime'),
+          's_ignoreFirstMines': localStorage.getItem('s_ignoreFirstMines'),
+          's_audio': localStorage.getItem('s_audio'),
+          's_volume': localStorage.getItem('s_volume') / 100,
+        },
+        receiveAnswer
+      )
+    })
+  }
+
+  //Stops timer on the Crabada page
+  function stopTimer() {
+    playSound(buttonSound)
+    chrome.tabs.query({active: true, currentWindow: true}, tabs => {
+      chrome.tabs.sendMessage(tabs[0].id, {'action': 'stopTimer'}, receiveAnswer)
     })
   }
 
@@ -173,6 +199,12 @@ document.addEventListener('DOMContentLoaded', function() {
   const minBPDiff = document.getElementById('minBPDiff')
   minBPDiff.addEventListener('input', e => localStorage.setItem('minBPDiff', e.target.value))
   minBPDiff.value = localStorage.getItem('minBPDiff')
+  
+  const timerTime = document.getElementById('timerTime')
+  timerTime.addEventListener('input', e => localStorage.setItem('timerTime', e.target.value))
+  timerTime.value = localStorage.getItem('timerTime')
+  document.getElementById('startTimer').addEventListener('click', startTimer)
+  document.getElementById('stopTimer').addEventListener('click', stopTimer)
 
   //Settings
   document.getElementById('settingsToggle').addEventListener('click', toggleSettings)
